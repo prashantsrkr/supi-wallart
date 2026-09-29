@@ -13,6 +13,10 @@ npm run build    # production build → dist/
 npm run preview  # serve the build locally
 ```
 
+Live at **https://folioi.in**, deployed to GitHub Pages by `.github/workflows/deploy.yml` on every
+push to `main`. DNS for folioi.in is managed at Hostinger: four `A @` records pointing to GitHub
+Pages (185.199.108-111.153) and `CNAME www → prashantsrkr.github.io`.
+
 ## Updating content
 
 Everything editable lives in `src/data/`. Components never need to change.
