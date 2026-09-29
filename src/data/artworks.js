@@ -9,7 +9,8 @@
  * (same filenames) for sharper results on large and retina screens.
  */
 
-const art = (file) => `/artwork/${file}`
+// BASE_URL keeps paths correct when the site is served from a sub-path (e.g. GitHub Pages).
+const art = (file) => `${import.meta.env.BASE_URL}artwork/${file}`
 
 /** Gallery filter order. Categories without any artwork are hidden automatically. */
 export const categories = ['Wall Art', '3D Art', 'POP Designs', 'Portraits', 'Paintings', 'Details']
