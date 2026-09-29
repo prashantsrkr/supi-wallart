@@ -4,6 +4,7 @@ import { navLinks, site } from '../data/site'
 import { useScrolled } from '../hooks/useScrolled'
 import { useActiveSection } from '../hooks/useActiveSection'
 import { InstagramIcon } from './Icons'
+import LogoMark from './LogoMark'
 
 const sectionIds = navLinks.map((l) => l.id)
 
@@ -50,10 +51,13 @@ export default function Navbar() {
       >
         <a
           href="#home"
-          className="font-serif text-lg tracking-tight text-ink sm:text-xl"
+          className="flex items-center gap-2.5 font-serif text-lg tracking-tight text-ink sm:text-xl"
           onClick={() => setOpen(false)}
         >
-          Supi <span className="italic text-clay">Wall Art</span>
+          <LogoMark className="h-7 w-auto shrink-0 sm:h-8" />
+          <span>
+            Supi <span className="italic text-clay">Wall Art</span>
+          </span>
         </a>
 
         <ul className="hidden items-center gap-8 lg:flex">

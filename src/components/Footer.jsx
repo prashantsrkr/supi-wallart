@@ -1,6 +1,7 @@
 import { ArrowUp } from 'lucide-react'
 import { navLinks, site } from '../data/site'
 import { InstagramIcon } from './Icons'
+import LogoMark from './LogoMark'
 
 export default function Footer() {
   return (
@@ -8,8 +9,11 @@ export default function Footer() {
       <div className="container-x py-16 sm:py-20">
         <div className="flex flex-col gap-12 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <a href="#home" className="font-serif text-4xl tracking-tight sm:text-5xl">
-              Supi <span className="italic text-clay-soft">Wall Art</span>
+            <a href="#home" className="flex items-center gap-4 font-serif text-4xl tracking-tight sm:text-5xl">
+              <LogoMark className="h-14 w-auto shrink-0 text-ivory sm:h-16" petal="#C98A6E" petalSoft="#A65A3F" strokeWidth={5} />
+              <span>
+                Supi <span className="italic text-clay-soft">Wall Art</span>
+              </span>
             </a>
             <p className="mt-3 text-xs tracking-[0.3em] text-ivory/50 uppercase">{site.tagline}</p>
             <p className="mt-4 text-sm text-ivory/60">

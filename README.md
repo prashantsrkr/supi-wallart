@@ -54,6 +54,13 @@ Until `formEmail` is set, the form only logs submissions in development and show
 Phone, WhatsApp, email and location live in `contact` in `src/data/site.js`. Items without an
 `href` render as plain text. The floating WhatsApp button opens a chat with the WhatsApp number.
 
+## Brand
+Logo files live in `brand/` (SVG masters plus PNG exports): horizontal, stacked, dark-background,
+profile picture (1080×1080, for Google Business Profile / Instagram), app icon and the standalone
+mark. On the site, `src/components/LogoMark.jsx` renders the mark in the header and footer, and
+`public/favicon.svg`, `apple-touch-icon.png`, `icon-512.png` and `logo.png` (used in structured
+data) come from the same design.
+
 ## SEO
 - `npm run build` pre-renders the page (`scripts/prerender.js` + `src/entry-server.jsx`), so the
   full HTML is in `dist/index.html` for search engines and link previews; React then hydrates it.
