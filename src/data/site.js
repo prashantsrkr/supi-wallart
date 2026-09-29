@@ -12,12 +12,15 @@ export const site = {
     url: 'https://www.instagram.com/supi_wallart/',
   },
   /**
-   * Commission form delivery. Enquiries are emailed to this Gmail address via FormSubmit
-   * (https://formsubmit.co). After the first submission, FormSubmit sends an activation email
-   * to this inbox; click "Activate" once. You can then replace the address with the random
-   * alias FormSubmit gives you, so the Gmail address isn't visible in the site's code.
+   * Commission form delivery (see src/lib/submitCommission.js).
+   * - web3formsKey: access key from https://web3forms.com for the inbox below. Preferred; when
+   *   set, the form uses Web3Forms.
+   * - email: fallback via FormSubmit (https://formsubmit.co), used while no key is set.
    */
-  formEmail: 'supritisarkar18@gmail.com',
+  form: {
+    web3formsKey: '',
+    email: 'supritisarkar18@gmail.com',
+  },
   /** Contact details. When `href` is null the item is shown as plain text. */
   contact: {
     phone: { label: 'Phone', value: '+91 74578 13456', href: 'tel:+917457813456' },

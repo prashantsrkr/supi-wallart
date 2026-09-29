@@ -77,6 +77,18 @@ export default function Contact() {
     }
   }
 
+  // Pre-filled text for the WhatsApp / email fallback, so nothing typed is lost.
+  const fallbackText = () =>
+    [
+      `Hi Supi, I'm ${values.name.trim()}.`,
+      values.artworkType && `Artwork type: ${values.artworkType}`,
+      values.message.trim(),
+      values.phone.trim() && `Phone: ${values.phone.trim()}`,
+      values.email.trim() && `Email: ${values.email.trim()}`,
+    ]
+      .filter(Boolean)
+      .join('\n\n')
+
   const fieldProps = (name) => ({
     id: `contact-${name}`,
     name,
@@ -222,9 +234,29 @@ export default function Contact() {
                 </div>
 
                 {status === 'error' && (
-                  <p role="alert" className="mt-5 text-sm text-[#9b3b24]">
-                    {serverError}
-                  </p>
+                  <div role="alert" className="mt-5 rounded-xl border border-[#9b3b24]/20 bg-[#9b3b24]/5 p-4 text-sm">
+                    <p className="font-medium text-[#9b3b24]">{serverError}</p>
+                    <p className="mt-1 text-muted">
+                      Please try again, or send the same message directly:
+                    </p>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      <a
+                        href={`${site.contact.whatsapp.href}?text=${encodeURIComponent(fallbackText())}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 rounded-full bg-[#1f7a4d] px-4 py-2 font-medium text-white transition-opacity hover:opacity-90"
+                      >
+                        <WhatsAppIcon className="h-4 w-4" /> WhatsApp
+                        <span className="sr-only">(opens in a new tab)</span>
+                      </a>
+                      <a
+                        href={`${site.contact.email.href}?subject=${encodeURIComponent('Commission enquiry')}&body=${encodeURIComponent(fallbackText())}`}
+                        className="inline-flex items-center gap-2 rounded-full border border-ink/15 px-4 py-2 font-medium text-ink transition-colors hover:bg-white/60"
+                      >
+                        <Mail className="h-4 w-4" aria-hidden="true" /> Email
+                      </a>
+                    </div>
+                  </div>
                 )}
 
                 <div className="mt-8 flex flex-col-reverse items-start gap-5 sm:flex-row sm:items-center sm:justify-between">

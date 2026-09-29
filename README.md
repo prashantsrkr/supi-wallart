@@ -39,16 +39,19 @@ To add a piece: put the photo in `public/artwork/`, then add an entry to `artwor
 `wide`). Gallery filters only show categories that have at least one piece.
 
 ### Commission form → Gmail
-The form emails enquiries through [FormSubmit](https://formsubmit.co) (no backend or account needed).
+Enquiries are emailed to Supi's inbox without a backend. Settings are in `form` in
+`src/data/site.js`; logic is in `src/lib/submitCommission.js`.
 
-1. `formEmail` in `src/data/site.js` is set to the Gmail inbox that receives enquiries.
-2. Deploy, then submit the form once. FormSubmit emails that inbox an activation link. Click
-   **Activate** (nothing is delivered until you do).
-3. Optional: FormSubmit then shows a random alias string. Put that in `formEmail` instead, so the
-   Gmail address isn't visible in the site's code.
+- **Web3Forms (preferred):** go to [web3forms.com](https://web3forms.com), enter the inbox
+  address, and copy the access key it emails you into `form.web3formsKey`. Free up to 250
+  submissions/month. The key is safe to publish.
+- **FormSubmit (fallback, used while no key is set):** sends to `form.email`. The first
+  submission triggers a one-time activation email; click **Activate**. FormSubmit can be slow or
+  briefly unavailable, which browsers report as a CORS error.
 
-Until `formEmail` is set, the form only logs submissions in development and shows a friendly
-"message me on Instagram" error in production. A hidden honeypot field filters basic spam bots.
+If sending fails or takes over 20 seconds, the form keeps what the visitor typed and offers
+WhatsApp and email buttons pre-filled with their message. A hidden honeypot field filters basic
+spam bots.
 
 ### Contact details
 Phone, WhatsApp, email and location live in `contact` in `src/data/site.js`. Items without an

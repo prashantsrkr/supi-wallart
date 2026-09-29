@@ -1,51 +1,84 @@
 import { site } from '../data/site'
 
 /**
- * Commission form submission.
+ * Commission form submission. Enquiries are emailed to Supi's inbox, with no backend needed.
  *
- * Enquiries are emailed to `site.formEmail` (see src/data/site.js) through FormSubmit's AJAX
- * endpoint. No server or account is needed. The first ever submission triggers a one-time
- * activation email to that inbox; nothing is delivered until "Activate" is clicked.
+ * Provider (configured in src/data/site.js → `form`):
+ *  1. Web3Forms, when `web3formsKey` is set (preferred: fast and reliable, free up to 250/month).
+ *     Get a key at https://web3forms.com by entering the inbox address; the key is emailed there.
+ *     The key is safe to publish in front-end code.
+ *  2. Otherwise FormSubmit, sending to `email`. The first submission triggers a one-time
+ *     activation email to that inbox; nothing is delivered until "Activate" is clicked.
  *
- * Until an address is set, submissions are only logged in development and show a friendly
- * error in production, so no enquiry is silently lost.
+ * Requests time out after 20s so a slow provider never leaves the visitor waiting; the form
+ * then offers WhatsApp and email as alternatives.
  */
-export async function submitCommission(data) {
-  const recipient = site.formEmail.trim()
+const TIMEOUT_MS = 20000
 
-  if (!recipient) {
+export async function submitCommission(data) {
+  const { web3formsKey, email } = site.form
+
+  if (!web3formsKey && !email) {
     if (import.meta.env.DEV) {
       await new Promise((resolve) => setTimeout(resolve, 900))
-      console.info('[commission] formEmail not set; would submit:', data)
+      console.info('[commission] no form provider configured; would submit:', data)
       return { ok: true }
     }
-    throw new Error(
-      `The form isn't connected yet. Please message me on Instagram at ${site.instagram.handle}.`,
-    )
+    throw new Error("The form isn't connected yet.")
   }
 
-  const res = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(recipient)}`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-    body: JSON.stringify({
-      Name: data.name,
-      Email: data.email,
-      Phone: data.phone || 'Not provided',
-      'Artwork Type': data.artworkType,
-      Message: data.message,
-      _subject: `New commission enquiry from ${data.name}`,
-      _replyto: data.email,
-      _template: 'table',
-      _captcha: 'false',
-      _honey: data.honey || '',
-    }),
-  })
+  const subject = `New commission enquiry from ${data.name}`
+  const request = web3formsKey
+    ? {
+        url: 'https://api.web3forms.com/submit',
+        body: {
+          access_key: web3formsKey,
+          subject,
+          from_name: 'Supi Wall Art website',
+          name: data.name,
+          email: data.email,
+          phone: data.phone || 'Not provided',
+          artwork_type: data.artworkType,
+          message: data.message,
+          botcheck: Boolean(data.honey),
+        },
+      }
+    : {
+        url: `https://formsubmit.co/ajax/${email}`,
+        body: {
+          Name: data.name,
+          Email: data.email,
+          Phone: data.phone || 'Not provided',
+          'Artwork Type': data.artworkType,
+          Message: data.message,
+          _subject: subject,
+          _replyto: data.email,
+          _template: 'table',
+          _captcha: 'false',
+          _honey: data.honey || '',
+        },
+      }
+
+  const controller = new AbortController()
+  const timer = setTimeout(() => controller.abort(), TIMEOUT_MS)
+  let res
+  try {
+    res = await fetch(request.url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify(request.body),
+      signal: controller.signal,
+    })
+  } catch {
+    // Network failure, timeout, or a provider error page without CORS headers.
+    throw new Error("Sorry, your message couldn't be sent right now.")
+  } finally {
+    clearTimeout(timer)
+  }
 
   const result = await res.json().catch(() => ({}))
   if (!res.ok || String(result.success) !== 'true') {
-    throw new Error(
-      `Sorry, your message couldn't be sent. Please try again, or message me on Instagram at ${site.instagram.handle}.`,
-    )
+    throw new Error("Sorry, your message couldn't be sent right now.")
   }
   return { ok: true }
 }
