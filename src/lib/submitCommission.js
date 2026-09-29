@@ -36,7 +36,9 @@ export async function submitCommission(data) {
           subject,
           from_name: 'Supi Wall Art website',
           name: data.name,
-          email: data.email,
+          // Visitors may give email, phone, or both. Only send email when present so the
+          // provider sets reply-to correctly.
+          ...(data.email && { email: data.email }),
           phone: data.phone || 'Not provided',
           artwork_type: data.artworkType,
           message: data.message,
@@ -47,12 +49,12 @@ export async function submitCommission(data) {
         url: `https://formsubmit.co/ajax/${email}`,
         body: {
           Name: data.name,
-          Email: data.email,
+          Email: data.email || 'Not provided',
           Phone: data.phone || 'Not provided',
           'Artwork Type': data.artworkType,
           Message: data.message,
           _subject: subject,
-          _replyto: data.email,
+          ...(data.email && { _replyto: data.email }),
           _template: 'table',
           _captcha: 'false',
           _honey: data.honey || '',
@@ -90,9 +92,12 @@ const PHONE_RE = /^[+\d][\d\s()-]{6,18}$/
 export function validateCommission(values) {
   const errors = {}
   if (values.name.trim().length < 2) errors.name = 'Please share your name.'
-  if (!EMAIL_RE.test(values.email.trim())) errors.email = 'Please enter a valid email address.'
-  if (values.phone.trim() && !PHONE_RE.test(values.phone.trim()))
-    errors.phone = 'Please enter a valid phone number, or leave it blank.'
+  const email = values.email.trim()
+  const phone = values.phone.trim()
+  // At least one way to reply is required; whichever is given must be valid.
+  if (!email && !phone) errors.contact = 'Please add an email or a phone number so I can reply.'
+  if (email && !EMAIL_RE.test(email)) errors.email = 'Please enter a valid email address.'
+  if (phone && !PHONE_RE.test(phone)) errors.phone = 'Please enter a valid phone number.'
   if (!values.artworkType) errors.artworkType = 'Choose the kind of artwork you have in mind.'
   if (values.message.trim().length < 15)
     errors.message = 'Tell me a little more, at least a sentence about your space or idea.'

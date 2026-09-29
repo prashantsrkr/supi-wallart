@@ -13,12 +13,12 @@ const initial = { name: '', email: '', phone: '', artworkType: '', message: '', 
 const inputBase =
   'peer w-full rounded-xl border bg-white/60 px-4 py-3.5 text-[0.95rem] text-ink placeholder:text-muted/60 transition-colors duration-300 focus:bg-white/90 focus:outline-none focus-visible:outline-none'
 
-function Field({ id, label, optional, error, children }) {
+function Field({ id, label, hint, error, children }) {
   return (
     <div>
       <label htmlFor={id} className="mb-2 flex items-baseline justify-between text-sm font-medium text-ink">
         {label}
-        {optional && <span className="text-xs font-normal text-muted">Optional</span>}
+        {hint && <span className="text-xs font-normal text-muted">{hint}</span>}
       </label>
       {children}
       {error && (
@@ -40,7 +40,12 @@ export default function Contact() {
   const update = (e) => {
     const { name, value } = e.target
     setValues((v) => ({ ...v, [name]: value }))
-    if (errors[name]) setErrors((errs) => ({ ...errs, [name]: undefined }))
+    setErrors((errs) => {
+      const clearContact = (name === 'email' || name === 'phone') && errs.contact
+      return errs[name] || clearContact
+        ? { ...errs, [name]: undefined, ...(clearContact && { contact: undefined }) }
+        : errs
+    })
   }
 
   const handleBlur = (e) => {
@@ -55,7 +60,8 @@ export default function Contact() {
     const found = validateCommission(values)
     setErrors(found)
     if (Object.keys(found).length) {
-      formRef.current?.querySelector(`[name="${Object.keys(found)[0]}"]`)?.focus()
+      const first = Object.keys(found)[0]
+      formRef.current?.querySelector(`[name="${first === 'contact' ? 'email' : first}"]`)?.focus()
       return
     }
     setStatus('submitting')
@@ -89,16 +95,21 @@ export default function Contact() {
       .filter(Boolean)
       .join('\n\n')
 
-  const fieldProps = (name) => ({
-    id: `contact-${name}`,
-    name,
-    value: values[name],
-    onChange: update,
-    onBlur: handleBlur,
-    'aria-invalid': errors[name] ? true : undefined,
-    'aria-describedby': errors[name] ? `contact-${name}-error` : undefined,
-    className: `${inputBase} ${errors[name] ? 'border-[#9b3b24]/60' : 'border-ink/10 focus:border-clay'}`,
-  })
+  const fieldProps = (name) => {
+    // Email and phone share one "give me at least one" error.
+    const shared = (name === 'email' || name === 'phone') && errors.contact
+    const invalid = errors[name] || shared
+    return {
+      id: `contact-${name}`,
+      name,
+      value: values[name],
+      onChange: update,
+      onBlur: handleBlur,
+      'aria-invalid': invalid ? true : undefined,
+      'aria-describedby': errors[name] ? `contact-${name}-error` : shared ? 'contact-either-error' : undefined,
+      className: `${inputBase} ${invalid ? 'border-[#9b3b24]/60' : 'border-ink/10 focus:border-clay'}`,
+    }
+  }
 
   const contactItems = [
     { icon: InstagramIcon, label: 'Instagram', value: site.instagram.handle, href: site.instagram.url, external: true },
@@ -178,7 +189,7 @@ export default function Contact() {
                 </span>
                 <h3 className="mt-6 font-serif text-3xl text-ink">Thank you, message received.</h3>
                 <p className="mt-3 max-w-sm text-muted">
-                  I’ll get back to you within a couple of days to hear more about your space and idea.
+                  I’ll get back to you within 12 hours to hear more about your space and idea.
                 </p>
                 <button type="button" onClick={() => setStatus('idle')} className="btn-ghost mt-8">
                   Send another message
@@ -187,7 +198,7 @@ export default function Contact() {
             ) : (
               <form ref={formRef} noValidate onSubmit={handleSubmit} aria-describedby="form-note">
                 <p id="form-note" className="sr-only">
-                  Fields marked optional can be left blank. All other fields are required.
+                  Name, artwork type and message are required. Add an email, a phone number, or both.
                 </p>
                 <div aria-hidden="true" className="sr-only">
                   <label htmlFor="contact-honey">Leave this field empty</label>
@@ -196,12 +207,6 @@ export default function Contact() {
                 <div className="grid gap-5 sm:grid-cols-2">
                   <Field id="contact-name" label="Name" error={errors.name}>
                     <input type="text" autoComplete="name" required placeholder="Your name" {...fieldProps('name')} />
-                  </Field>
-                  <Field id="contact-email" label="Email" error={errors.email}>
-                    <input type="email" autoComplete="email" inputMode="email" required placeholder="you@example.com" {...fieldProps('email')} />
-                  </Field>
-                  <Field id="contact-phone" label="Phone" optional error={errors.phone}>
-                    <input type="tel" autoComplete="tel" inputMode="tel" placeholder="+91 …" {...fieldProps('phone')} />
                   </Field>
                   <Field id="contact-artworkType" label="Artwork Type" error={errors.artworkType}>
                     <div className="relative">
@@ -220,6 +225,17 @@ export default function Contact() {
                       </svg>
                     </div>
                   </Field>
+                  <Field id="contact-email" label="Email" hint="Email or phone" error={errors.email}>
+                    <input type="email" autoComplete="email" inputMode="email" placeholder="you@example.com" {...fieldProps('email')} />
+                  </Field>
+                  <Field id="contact-phone" label="Phone" hint="Email or phone" error={errors.phone}>
+                    <input type="tel" autoComplete="tel" inputMode="tel" placeholder="+91 …" {...fieldProps('phone')} />
+                  </Field>
+                  {errors.contact && (
+                    <p id="contact-either-error" className="-mt-2 text-sm text-[#9b3b24] sm:col-span-2">
+                      {errors.contact}
+                    </p>
+                  )}
                   <div className="sm:col-span-2">
                     <Field id="contact-message" label="Message" error={errors.message}>
                       <textarea
@@ -260,7 +276,7 @@ export default function Contact() {
                 )}
 
                 <div className="mt-8 flex flex-col-reverse items-start gap-5 sm:flex-row sm:items-center sm:justify-between">
-                  <p className="text-sm text-muted">I usually reply within 48 hours.</p>
+                  <p className="text-sm text-muted">I usually reply within 12 hours.</p>
                   <button
                     type="submit"
                     disabled={status === 'submitting'}
