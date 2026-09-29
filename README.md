@@ -54,6 +54,15 @@ Until `formEmail` is set, the form only logs submissions in development and show
 Phone, WhatsApp, email and location live in `contact` in `src/data/site.js`. Items without an
 `href` render as plain text. The floating WhatsApp button opens a chat with the WhatsApp number.
 
+## SEO
+- `npm run build` pre-renders the page (`scripts/prerender.js` + `src/entry-server.jsx`), so the
+  full HTML is in `dist/index.html` for search engines and link previews; React then hydrates it.
+- `index.html` holds the title, description, Open Graph tags and LocalBusiness structured data
+  (JSON-LD). Keep phone, email and location there in sync with `src/data/site.js`.
+- `public/sitemap.xml` (with artwork images) and `public/robots.txt`. Update `<lastmod>` and the
+  image list in the sitemap when artwork changes.
+- `public/og-image.jpg` is the 1200×630 social share image.
+
 ## Structure
 
 ```
@@ -64,5 +73,6 @@ src/
   data/         site, artworks, services, testimonials
   hooks/        useScrolled, useActiveSection, useParallax, useReducedMotion
   lib/          submitCommission (form submit + validation)
+  entry-server.jsx  server render used by scripts/prerender.js at build time
   index.css     design tokens (@theme), glass/button utilities, reveal + reduced-motion rules
 ```

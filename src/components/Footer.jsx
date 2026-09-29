@@ -12,6 +12,9 @@ export default function Footer() {
               Supi <span className="italic text-clay-soft">Wall Art</span>
             </a>
             <p className="mt-3 text-xs tracking-[0.3em] text-ivory/50 uppercase">{site.tagline}</p>
+            <p className="mt-4 text-sm text-ivory/60">
+              Wall artist in {site.contact.location.value}, Uttarakhand
+            </p>
           </div>
 
           <nav aria-label="Footer">
