@@ -18,7 +18,7 @@ export const site = {
    * - email: fallback via FormSubmit (https://formsubmit.co), used while no key is set.
    */
   form: {
-    web3formsKey: '',
+    web3formsKey: '373e5049-7c8c-47df-a5bd-29cb4c6e37dc',
     email: 'supritisarkar18@gmail.com',
   },
   /** Contact details. When `href` is null the item is shown as plain text. */
