@@ -1,12 +1,13 @@
 /**
- * Artwork library, built from Supi's Instagram (@supi_wallart).
+ * Artwork library: Supi's own photos, plus a few pieces saved from Instagram (@supi_wallart).
  *
  * Images live in /public/artwork/. To add a piece, drop the photo there and add an entry below.
  * `aspect` controls the tile shape in the masonry gallery:
  *   'tall' (3:4) · 'portrait' (4:5) · 'square' (1:1) · 'landscape' (4:3) · 'wide' (16:10)
  *
- * Note: these were saved from Instagram at 640px. Swap in the original phone photos
- * (same filenames) for sharper results on large and retina screens.
+ * Photos are resized to 1600px on the long edge. The detail shots (calla-*, lotus-relief-3d,
+ * pop-plaster-mix, supi-painting-calla) are still 640px Instagram saves: replace them with the
+ * original photos, using the same filenames, when available.
  */
 
 // BASE_URL keeps paths correct when the site is served from a sub-path (e.g. GitHub Pages).
@@ -25,6 +26,14 @@ export const artworks = [
     description: 'A hand-painted lotus mural in rose, white and fresh greens, climbing up a warm cream wall.',
   },
   {
+    id: 'pichwai-cow-and-calf',
+    title: 'Pichwai Cow & Calf',
+    category: 'Wall Art',
+    image: art('pichwai-cow-and-calf.jpg'),
+    aspect: 'square',
+    description: 'A Pichwai-inspired mural of a cow and her calf beside blooming pink lotuses, in soft, warm tones.',
+  },
+  {
     id: 'sculpted-lotus',
     title: 'Sculpted Lotus',
     category: 'POP Designs',
@@ -39,6 +48,14 @@ export const artworks = [
     image: art('calla-lily-wall.jpg'),
     aspect: 'tall',
     description: 'Tall pink calla lilies with sweeping leaves, painted to wrap around a corner wall.',
+  },
+  {
+    id: 'tulip-arch',
+    title: 'Tulip Arch',
+    category: 'Wall Art',
+    image: art('tulip-arch.jpg'),
+    aspect: 'landscape',
+    description: 'Golden tulips rising inside a painted yellow arch, turning a floating shelf into a feature wall.',
   },
   {
     id: 'sunrise-window',
@@ -63,6 +80,14 @@ export const artworks = [
     image: art('monstera-living-room.jpg'),
     aspect: 'landscape',
     description: 'Monstera and tropical leaves in green and burnt orange, trailing across a living room wall.',
+  },
+  {
+    id: 'linework-blooms',
+    title: 'Linework Blooms',
+    category: 'Wall Art',
+    image: art('linework-blooms.jpg'),
+    aspect: 'wide',
+    description: 'Oversized flowers drawn in bold black line, lifted with sweeps of yellow and fresh green leaves.',
   },
   {
     id: 'banana-tree',
