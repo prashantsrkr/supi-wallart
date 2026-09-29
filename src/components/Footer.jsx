@@ -1,6 +1,6 @@
 import { ArrowUp } from 'lucide-react'
 import { navLinks, site } from '../data/site'
-import { InstagramIcon } from './Icons'
+import { InstagramIcon, WhatsAppIcon } from './Icons'
 import LogoMark from './LogoMark'
 import { goHome, homeHref } from '../lib/goHome'
 
@@ -42,7 +42,7 @@ export default function Footer() {
 
         <div className="mt-14 flex flex-col-reverse gap-6 border-t border-ivory/10 pt-8 text-sm text-ivory/50 sm:flex-row sm:items-center sm:justify-between">
           <p>© 2026 Supi Wall Art. All rights reserved.</p>
-          <div className="flex items-center gap-6">
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
             <a
               href={site.instagram.url}
               target="_blank"
@@ -51,6 +51,17 @@ export default function Footer() {
             >
               <InstagramIcon className="h-4 w-4" /> {site.instagram.handle}
               <span className="sr-only">(opens in a new tab)</span>
+            </a>
+            <a
+              href={`${site.contact.whatsapp.href}?text=${encodeURIComponent(
+                'Hi Supi, I saw your work on folioi.in and would like to talk about a wall art commission.',
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-ivory/80 transition-colors hover:text-ivory"
+            >
+              <WhatsAppIcon className="h-4 w-4" /> {site.contact.whatsapp.value}
+              <span className="sr-only">on WhatsApp (opens in a new tab)</span>
             </a>
             <a
               href={homeHref}
