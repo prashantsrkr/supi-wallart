@@ -12,6 +12,7 @@ const aspectClass = {
   square: 'aspect-square',
   landscape: 'aspect-[4/3]',
   wide: 'aspect-[16/10]',
+  panorama: 'aspect-[5/2]',
 }
 
 const filters = ['All', ...categories.filter((c) => artworks.some((a) => a.category === c))]

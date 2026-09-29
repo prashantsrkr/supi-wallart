@@ -4,6 +4,7 @@
  * Images live in /public/artwork/. To add a piece, drop the photo there and add an entry below.
  * `aspect` controls the tile shape in the masonry gallery:
  *   'tall' (3:4) · 'portrait' (4:5) · 'square' (1:1) · 'landscape' (4:3) · 'wide' (16:10)
+ *   · 'panorama' (5:2)
  *
  * Photos are resized to 1600px on the long edge. The detail shots (calla-*, lotus-relief-3d,
  * pop-plaster-mix, supi-painting-calla) are still 640px Instagram saves: replace them with the
@@ -88,6 +89,15 @@ export const artworks = [
     image: art('linework-blooms.jpg'),
     aspect: 'wide',
     description: 'Oversized flowers drawn in bold black line, lifted with sweeps of yellow and fresh green leaves.',
+  },
+  {
+    id: 'dreams-and-wings',
+    title: 'Dreams & Wings',
+    category: 'Wall Art',
+    image: art('dreams-and-wings-panels.jpg'),
+    aspect: 'panorama',
+    description:
+      'Five hand-painted panels pairing boho botanicals and a rising sun with hand-lettered quotes: let your dreams be your wings, and the best is yet to come.',
   },
   {
     id: 'banana-tree',
