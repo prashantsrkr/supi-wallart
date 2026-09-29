@@ -1,6 +1,9 @@
+import { artworks } from '../data/artworks'
 import { testimonials } from '../data/testimonials'
 import Reveal from './Reveal'
 import SectionHeading from './SectionHeading'
+
+const artworkById = Object.fromEntries(artworks.map((a) => [a.id, a]))
 
 export default function Testimonials() {
   return (
@@ -17,26 +20,38 @@ export default function Testimonials() {
           }
         />
 
-        <ul className="mt-16 grid gap-12 md:grid-cols-3 md:gap-8 lg:mt-20 lg:gap-14">
-          {testimonials.map((t, i) => (
-            <Reveal as="li" key={t.name} delay={i * 110}>
-              <figure className="flex h-full flex-col border-t border-ink/10 pt-8">
-                <span aria-hidden="true" className="font-serif text-6xl leading-none text-clay/40">
-                  “
-                </span>
-                <blockquote className="mt-2 flex-1 font-serif text-xl leading-snug text-ink sm:text-[1.35rem]">
-                  {t.quote}
-                </blockquote>
-                <figcaption className="mt-8">
-                  <span className="block text-sm font-medium text-ink">{t.name}</span>
-                  <span className="mt-1 block text-sm text-muted">
-                    {t.project}
-                    {t.location && <> · {t.location}</>}
+        <ul className="mx-auto mt-16 grid max-w-5xl gap-12 md:grid-cols-2 md:gap-x-14 md:gap-y-16 lg:mt-20">
+          {testimonials.map((t, i) => {
+            const art = artworkById[t.artworkId]
+            const credit = [t.name, t.location].filter(Boolean).join(' · ')
+            return (
+              <Reveal as="li" key={t.project} delay={(i % 2) * 110}>
+                <figure className="flex h-full flex-col border-t border-ink/10 pt-8">
+                  <span aria-hidden="true" className="font-serif text-6xl leading-none text-clay/40">
+                    “
                   </span>
-                </figcaption>
-              </figure>
-            </Reveal>
-          ))}
+                  <blockquote className="mt-2 flex-1 font-serif text-xl leading-snug text-ink sm:text-[1.4rem]">
+                    {t.quote}
+                  </blockquote>
+                  <figcaption className="mt-8 flex items-center gap-4">
+                    {art && (
+                      <img
+                        src={art.image}
+                        alt=""
+                        loading="lazy"
+                        decoding="async"
+                        className="h-12 w-12 shrink-0 rounded-full object-cover ring-1 ring-ink/10"
+                      />
+                    )}
+                    <span>
+                      <span className="block text-sm font-medium text-ink">{t.project}</span>
+                      <span className="mt-0.5 block text-sm text-muted">{credit || 'Client, Supi Wall Art'}</span>
+                    </span>
+                  </figcaption>
+                </figure>
+              </Reveal>
+            )
+          })}
         </ul>
       </div>
     </section>
