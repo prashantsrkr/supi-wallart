@@ -83,6 +83,22 @@ export const artworks = [
     description: 'Monstera and tropical leaves in green and burnt orange, trailing across a living room wall.',
   },
   {
+    id: 'sunflower-corner',
+    title: 'Sunflower Corner',
+    category: 'Wall Art',
+    image: art('sunflower-corner.jpg'),
+    aspect: 'tall',
+    description: 'Four golden sunflowers with trailing leaves, painted to catch the light beside a sunny window.',
+  },
+  {
+    id: 'blooming-vine',
+    title: 'Blooming Vine',
+    category: 'Wall Art',
+    image: art('blooming-vine.jpg'),
+    aspect: 'tall',
+    description: 'Oversized violet and coral blossoms on a trailing vine that wraps around the corner of the room.',
+  },
+  {
     id: 'linework-blooms',
     title: 'Linework Blooms',
     category: 'Wall Art',

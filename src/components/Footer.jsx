@@ -2,6 +2,7 @@ import { ArrowUp } from 'lucide-react'
 import { navLinks, site } from '../data/site'
 import { InstagramIcon } from './Icons'
 import LogoMark from './LogoMark'
+import { goHome, homeHref } from '../lib/goHome'
 
 export default function Footer() {
   return (
@@ -9,7 +10,12 @@ export default function Footer() {
       <div className="container-x py-16 sm:py-20">
         <div className="flex flex-col gap-12 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <a href="#home" className="flex items-center gap-4 font-serif text-4xl tracking-tight sm:text-5xl">
+            <a
+              href={homeHref}
+              onClick={goHome}
+              aria-label="Supi Wall Art, back to top"
+              className="flex w-fit items-center gap-4 font-serif text-4xl tracking-tight transition-opacity hover:opacity-80 sm:text-5xl"
+            >
               <LogoMark className="h-14 w-auto shrink-0 text-ivory sm:h-16" petal="#C98A6E" petalSoft="#A65A3F" strokeWidth={5} />
               <span>
                 Supi <span className="italic text-clay-soft">Wall Art</span>
@@ -46,7 +52,11 @@ export default function Footer() {
               <InstagramIcon className="h-4 w-4" /> {site.instagram.handle}
               <span className="sr-only">(opens in a new tab)</span>
             </a>
-            <a href="#home" className="inline-flex items-center gap-1.5 text-ivory/80 transition-colors hover:text-ivory">
+            <a
+              href={homeHref}
+              onClick={goHome}
+              className="inline-flex items-center gap-1.5 text-ivory/80 transition-colors hover:text-ivory"
+            >
               Back to top <ArrowUp className="h-3.5 w-3.5" aria-hidden="true" />
             </a>
           </div>

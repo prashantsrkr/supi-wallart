@@ -5,6 +5,7 @@ import { useScrolled } from '../hooks/useScrolled'
 import { useActiveSection } from '../hooks/useActiveSection'
 import { InstagramIcon } from './Icons'
 import LogoMark from './LogoMark'
+import { goHome, homeHref } from '../lib/goHome'
 
 const sectionIds = navLinks.map((l) => l.id)
 
@@ -50,9 +51,13 @@ export default function Navbar() {
         }`}
       >
         <a
-          href="#home"
-          className="flex items-center gap-2.5 font-serif text-lg tracking-tight text-ink sm:text-xl"
-          onClick={() => setOpen(false)}
+          href={homeHref}
+          aria-label="Supi Wall Art, home"
+          className="flex items-center gap-2.5 rounded-full font-serif text-lg tracking-tight text-ink transition-opacity hover:opacity-80 sm:text-xl"
+          onClick={(e) => {
+            setOpen(false)
+            goHome(e)
+          }}
         >
           <LogoMark className="h-7 w-auto shrink-0 sm:h-8" />
           <span>
